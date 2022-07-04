@@ -29,8 +29,11 @@ class Miniplayer extends StatefulWidget {
   ///Option to set the animation curve
   final Curve curve;
 
-  ///Sets the background-color of the miniplayer
+  ///Sets the background-color of the miniplayer background scrim
   final Color backgroundColor;
+
+  ///Sets the background-color of the miniplayer
+  final Color? miniPlayerColor;
 
   ///Option to set the animation duration
   final Duration duration;
@@ -62,6 +65,7 @@ class Miniplayer extends StatefulWidget {
     this.onDismiss,
     this.onDismissed,
     this.controller,
+    this.miniPlayerColor,
   }) : super(key: key);
 
   @override
@@ -84,8 +88,6 @@ class _MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
   bool dismissed = false;
 
   bool animating = false;
-
-  Color? miniPlayerColor;
 
   ///Counts how many updates were required for a distance (onPanUpdate) -> necessary to calculate the drag speed
   int updateCount = 0;
@@ -204,7 +206,7 @@ class _MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
                             boxShadow: <BoxShadow>[
                               BoxShadow(color: Colors.black45, blurRadius: widget.elevation, offset: Offset(0.0, 4))
                             ],
-                            color: miniPlayerColor ?? Theme.of(context).canvasColor,
+                            color: widget.miniPlayerColor ?? Theme.of(context).canvasColor,
                           ),
                         ),
                       ),
