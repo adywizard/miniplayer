@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    show BuildContext, Key, ModalRoute, State, StatefulWidget, Widget, WillPopCallback;
 
 class MiniplayerWillPopScope extends StatefulWidget {
   const MiniplayerWillPopScope({
