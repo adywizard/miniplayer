@@ -3,6 +3,7 @@ description: A lightweight flutter package to simplify the creation of a minipla
 version: 1.0.1
 homepage: https://www.peterscode.dev
 repository: https://github.com/peterscodee/miniplayer
+publish_to: 'none'
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
