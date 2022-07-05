@@ -1,8 +1,8 @@
 name: miniplayer
 description: A lightweight flutter package to simplify the creation of a miniplayer.
-version: 1.0.1
-homepage: https://www.peterscode.dev
-repository: https://github.com/peterscodee/miniplayer
+version: 1.0.2
+homepage: https://github.com/adywizard
+repository: https://github.com/adywizard/miniplayer
 publish_to: 'none'
 
 environment:
@@ -11,18 +11,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.17.0
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
+dev_dependencies: {flutter_lints: ^2.0.1}
 
   # To add assets to your package, add an assets section, like this:
   # assets:

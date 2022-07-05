@@ -4,8 +4,7 @@ import 'package:example/main.dart';
 
 import '../utils.dart';
 
-final ValueNotifier<double> playerExpandProgress =
-    ValueNotifier(playerMinHeight);
+final ValueNotifier<double> playerExpandProgress = ValueNotifier(playerMinHeight);
 
 final MiniplayerController controller = MiniplayerController();
 
@@ -40,17 +39,13 @@ class DetailedPlayer extends StatelessWidget {
         //Declare additional widgets (eg. SkipButton) and variables
         if (!miniplayer) {
           var percentageExpandedPlayer = percentageFromValueInRange(
-              min: playerMaxHeight * miniplayerPercentageDeclaration +
-                  playerMinHeight,
+              min: playerMaxHeight * miniplayerPercentageDeclaration + playerMinHeight,
               max: playerMaxHeight,
               value: height);
           if (percentageExpandedPlayer < 0) percentageExpandedPlayer = 0;
-          final paddingVertical = valueFromPercentageInRange(
-              min: 0, max: 10, percentage: percentageExpandedPlayer);
+          final paddingVertical = valueFromPercentageInRange(min: 0, max: 10, percentage: percentageExpandedPlayer);
           final double heightWithoutPadding = height - paddingVertical * 2;
-          final double imageSize = heightWithoutPadding > maxImgSize
-              ? maxImgSize
-              : heightWithoutPadding;
+          final double imageSize = heightWithoutPadding > maxImgSize ? maxImgSize : heightWithoutPadding;
           final paddingLeft = valueFromPercentageInRange(
                 min: 0,
                 max: width - imageSize,
@@ -79,10 +74,7 @@ class DetailedPlayer extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      left: paddingLeft,
-                      top: paddingVertical,
-                      bottom: paddingVertical),
+                  padding: EdgeInsets.only(left: paddingLeft, top: paddingVertical, bottom: paddingVertical),
                   child: SizedBox(
                     height: imageSize,
                     child: img,
@@ -101,11 +93,7 @@ class DetailedPlayer extends StatelessWidget {
                         Flexible(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              buttonSkipBackwards,
-                              buttonPlayExpanded,
-                              buttonSkipForward
-                            ],
+                            children: [buttonSkipBackwards, buttonPlayExpanded, buttonSkipForward],
                           ),
                         ),
                         Flexible(child: progressIndicator),
@@ -123,8 +111,7 @@ class DetailedPlayer extends StatelessWidget {
         //Miniplayer
         final percentageMiniplayer = percentageFromValueInRange(
             min: playerMinHeight,
-            max: playerMaxHeight * miniplayerPercentageDeclaration +
-                playerMinHeight,
+            max: playerMaxHeight * miniplayerPercentageDeclaration + playerMinHeight,
             value: height);
 
         final elementOpacity = 1 - 1 * percentageMiniplayer;
@@ -150,21 +137,11 @@ class DetailedPlayer extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(audioObject.title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2!
-                                    .copyWith(fontSize: 16)),
+                                style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16)),
                             Text(
                               audioObject.subtitle,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText2!
-                                        .color!
-                                        .withOpacity(0.55),
+                              style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                                    color: Theme.of(context).textTheme.bodyText2!.color!.withOpacity(0.55),
                                   ),
                             ),
                           ],
@@ -175,7 +152,7 @@ class DetailedPlayer extends StatelessWidget {
                   IconButton(
                       icon: Icon(Icons.fullscreen),
                       onPressed: () {
-                        controller.animateToHeight(state: PanelState.MAX);
+                        controller.animateToHeight(state: PanelState.max);
                       }),
                   Padding(
                     padding: const EdgeInsets.only(right: 3),
