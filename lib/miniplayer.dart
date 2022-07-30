@@ -52,6 +52,13 @@ class Miniplayer extends StatefulWidget {
   //Allows you to manually control the miniplayer in code
   final MiniplayerController? controller;
 
+  /// Shadow color
+  final Color shadowColor;
+
+  final double yOffset;
+
+  final double xOffset;
+
   const Miniplayer({
     Key? key,
     required this.minHeight,
@@ -66,6 +73,9 @@ class Miniplayer extends StatefulWidget {
     this.onDismissed,
     this.controller,
     this.miniPlayerColor,
+    this.shadowColor = Colors.black45,
+    this.yOffset = 0.5,
+    this.xOffset = 0.0,
   }) : super(key: key);
 
   @override
@@ -191,9 +201,10 @@ class MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
                       valueListenable: dragDownPercentage,
                       builder: (BuildContext context, double value, Widget? child) {
                         return Opacity(
-                          opacity: borderDouble(minRange: 0.0, maxRange: 1.0, value: 1 - value * 0.8),
+                          opacity: (1 - value * 0.8)
+                              .clamp(0.0, 1.0), //borderDouble(minRange: 0.0, maxRange: 1.0, value: 1 - value * 0.8),
                           child: Transform.translate(
-                            offset: Offset(0.0, widget.minHeight * value * 0.5),
+                            offset: Offset(widget.xOffset, widget.minHeight * value * widget.yOffset),
                             child: child,
                           ),
                         );
@@ -205,7 +216,7 @@ class MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
                           decoration: BoxDecoration(
                             boxShadow: <BoxShadow>[
                               BoxShadow(
-                                  color: Colors.black45, blurRadius: widget.elevation, offset: const Offset(0.0, 4))
+                                  color: widget.shadowColor, blurRadius: widget.elevation, offset: const Offset(0.0, 4))
                             ],
                             color: widget.miniPlayerColor ?? Theme.of(context).canvasColor,
                           ),
