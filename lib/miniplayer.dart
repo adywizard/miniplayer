@@ -32,6 +32,9 @@ class Miniplayer extends StatefulWidget {
   ///Sets the background-color of the miniplayer background scrim
   final Color backgroundColor;
 
+  ///Sets the M3 surface-color of the miniplayer
+  final Color? surfaceTintColor;
+
   ///Sets the background-color of the miniplayer
   final Color? miniPlayerColor;
 
@@ -76,6 +79,7 @@ class Miniplayer extends StatefulWidget {
     this.shadowColor = Colors.black45,
     this.yOffset = 0.5,
     this.xOffset = 0.0,
+    this.surfaceTintColor,
   }) : super(key: key);
 
   @override
@@ -210,6 +214,7 @@ class MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
                         );
                       },
                       child: Material(
+                        surfaceTintColor: widget.surfaceTintColor,
                         color: widget.miniPlayerColor,
                         child: Container(
                           constraints: const BoxConstraints.expand(),
