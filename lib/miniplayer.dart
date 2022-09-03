@@ -192,7 +192,7 @@ class MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
                 GestureDetector(
                   onTap: () => _animateToHeight(widget.minHeight),
                   child: Opacity(
-                    opacity: borderDouble(minRange: 0.0, maxRange: 1.0, value: percentage),
+                    opacity: percentage.clamp(0.0, 1.0),
                     child: Container(color: widget.backgroundColor),
                   ),
                 ),
@@ -205,8 +205,7 @@ class MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
                       valueListenable: dragDownPercentage,
                       builder: (BuildContext context, double value, Widget? child) {
                         return Opacity(
-                          opacity: (1 - value * 0.8)
-                              .clamp(0.0, 1.0), //borderDouble(minRange: 0.0, maxRange: 1.0, value: 1 - value * 0.8),
+                          opacity: (1 - value * 0.8).clamp(0.0, 1.0),
                           child: Transform.translate(
                             offset: Offset(widget.xOffset, widget.minHeight * value * widget.yOffset),
                             child: child,
