@@ -169,7 +169,7 @@ class MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     if (dismissed) {
-      return Container();
+      return const SizedBox();
     }
 
     return MiniplayerWillPopScope(
@@ -217,8 +217,8 @@ class MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
                         surfaceTintColor: widget.surfaceTintColor,
                         color: widget.miniPlayerColor,
                         elevation: widget.elevation,
-                        child: Container(
-                          constraints: const BoxConstraints.expand(),
+                        child: SizedBox.expand(
+                          // constraints: const BoxConstraints.expand(),
                           // decoration: BoxDecoration(
                           //   boxShadow: <BoxShadow>[
                           //     BoxShadow(
@@ -230,7 +230,9 @@ class MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
                         ),
                       ),
                     ),
-                    onTap: () => _snapToPosition(_dragHeight != widget.maxHeight ? PanelState.max : PanelState.min),
+                    onTap: () => height == widget.maxHeight
+                        ? _snapToPosition(_dragHeight != widget.maxHeight ? PanelState.max : PanelState.min)
+                        : null,
                     onPanStart: (details) {
                       _startHeight = _dragHeight;
                       updateCount = 0;
