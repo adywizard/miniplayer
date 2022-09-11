@@ -196,99 +196,102 @@ class MiniplayerState extends State<Miniplayer> with TickerProviderStateMixin {
                     child: Container(color: widget.backgroundColor),
                   ),
                 ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  height: height,
-                  child: GestureDetector(
-                    child: ValueListenableBuilder(
-                      valueListenable: dragDownPercentage,
-                      builder: (BuildContext context, double value, Widget? child) {
-                        return Opacity(
-                          opacity: (1 - value * 0.8).clamp(0.0, 1.0),
-                          child: Transform.translate(
-                            offset: Offset(widget.xOffset, widget.minHeight * value * widget.yOffset),
-                            child: child,
+              SafeArea(
+                top: false,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    height: height,
+                    child: GestureDetector(
+                      child: ValueListenableBuilder(
+                        valueListenable: dragDownPercentage,
+                        builder: (BuildContext context, double value, Widget? child) {
+                          return Opacity(
+                            opacity: (1 - value * 0.8).clamp(0.0, 1.0),
+                            child: Transform.translate(
+                              offset: Offset(widget.xOffset, widget.minHeight * value * widget.yOffset),
+                              child: child,
+                            ),
+                          );
+                        },
+                        child: Material(
+                          surfaceTintColor: widget.surfaceTintColor,
+                          color: widget.miniPlayerColor,
+                          elevation: widget.elevation,
+                          child: SizedBox.expand(
+                            child: widget.builder(height, percentage),
                           ),
-                        );
-                      },
-                      child: Material(
-                        surfaceTintColor: widget.surfaceTintColor,
-                        color: widget.miniPlayerColor,
-                        elevation: widget.elevation,
-                        child: SizedBox.expand(
-                          child: widget.builder(height, percentage),
                         ),
                       ),
+                      onTap: () => height == widget.minHeight
+                          ? _snapToPosition(_dragHeight != widget.maxHeight ? PanelState.max : PanelState.min)
+                          : null,
+                      onPanStart: (details) {
+                        _startHeight = _dragHeight;
+                        updateCount = 0;
+
+                        if (animating) {
+                          _resetAnimationController();
+                        }
+                      },
+                      onPanEnd: (details) async {
+                        ///Calculates drag speed
+                        double speed =
+                            (_dragHeight - _startHeight * _dragHeight < _startHeight ? 1 : -1) / updateCount * 100;
+
+                        ///Define the percentage distance depending on the speed with which the widget should snap
+                        double snapPercentage = 0.005;
+                        if (speed <= 4) {
+                          snapPercentage = 0.2;
+                        } else if (speed <= 9) {
+                          snapPercentage = 0.08;
+                        } else if (speed <= 50) {
+                          snapPercentage = 0.01;
+                        }
+
+                        ///Determine to which SnapPosition the widget should snap
+                        PanelState snap = PanelState.min;
+
+                        final percentageMax = percentageFromValueInRange(
+                            min: widget.minHeight, max: widget.maxHeight, value: _dragHeight);
+
+                        ///Started from expanded state
+                        if (_startHeight > widget.minHeight) {
+                          if (percentageMax > 1 - snapPercentage) {
+                            snap = PanelState.max;
+                          }
+                        }
+
+                        ///Started from minified state
+                        else {
+                          if (percentageMax > snapPercentage) {
+                            snap = PanelState.max;
+                          }
+
+                          ///DismissedPercentage > 0.2 -> dismiss
+                          else if (onDismissed != null &&
+                              percentageFromValueInRange(
+                                    min: widget.minHeight,
+                                    max: 0,
+                                    value: _dragHeight,
+                                  ) >
+                                  snapPercentage) {
+                            snap = PanelState.dismiss;
+                          }
+                        }
+
+                        ///Snap to position
+                        _snapToPosition(snap);
+                      },
+                      onPanUpdate: (details) {
+                        if (dismissed) return;
+
+                        _dragHeight -= details.delta.dy;
+                        updateCount++;
+
+                        _handleHeightChange();
+                      },
                     ),
-                    onTap: () => height == widget.minHeight
-                        ? _snapToPosition(_dragHeight != widget.maxHeight ? PanelState.max : PanelState.min)
-                        : null,
-                    onPanStart: (details) {
-                      _startHeight = _dragHeight;
-                      updateCount = 0;
-
-                      if (animating) {
-                        _resetAnimationController();
-                      }
-                    },
-                    onPanEnd: (details) async {
-                      ///Calculates drag speed
-                      double speed =
-                          (_dragHeight - _startHeight * _dragHeight < _startHeight ? 1 : -1) / updateCount * 100;
-
-                      ///Define the percentage distance depending on the speed with which the widget should snap
-                      double snapPercentage = 0.005;
-                      if (speed <= 4) {
-                        snapPercentage = 0.2;
-                      } else if (speed <= 9) {
-                        snapPercentage = 0.08;
-                      } else if (speed <= 50) {
-                        snapPercentage = 0.01;
-                      }
-
-                      ///Determine to which SnapPosition the widget should snap
-                      PanelState snap = PanelState.min;
-
-                      final percentageMax =
-                          percentageFromValueInRange(min: widget.minHeight, max: widget.maxHeight, value: _dragHeight);
-
-                      ///Started from expanded state
-                      if (_startHeight > widget.minHeight) {
-                        if (percentageMax > 1 - snapPercentage) {
-                          snap = PanelState.max;
-                        }
-                      }
-
-                      ///Started from minified state
-                      else {
-                        if (percentageMax > snapPercentage) {
-                          snap = PanelState.max;
-                        }
-
-                        ///DismissedPercentage > 0.2 -> dismiss
-                        else if (onDismissed != null &&
-                            percentageFromValueInRange(
-                                  min: widget.minHeight,
-                                  max: 0,
-                                  value: _dragHeight,
-                                ) >
-                                snapPercentage) {
-                          snap = PanelState.dismiss;
-                        }
-                      }
-
-                      ///Snap to position
-                      _snapToPosition(snap);
-                    },
-                    onPanUpdate: (details) {
-                      if (dismissed) return;
-
-                      _dragHeight -= details.delta.dy;
-                      updateCount++;
-
-                      _handleHeightChange();
-                    },
                   ),
                 ),
               ),
